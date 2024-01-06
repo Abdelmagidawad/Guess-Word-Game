@@ -25,6 +25,16 @@ function generateTryDiv() {
   }
 
   inputsContainer.children[0].children[1].focus();
+
+  //Disable all inputs expect first One
+  disabledAllInputs();
+  //
+  const inputs = document.querySelectorAll("input");
+  // Convert Input To Uppercase and focus next
+  convertInputToUpperAndFocus(inputs);
+
+  //Move To next and previous Input
+  moveToRightAndLeft(inputs);
 }
 
 function generateInputs(Iterable, tryDiv) {
@@ -35,6 +45,43 @@ function generateInputs(Iterable, tryDiv) {
     input.setAttribute("maxlength", "1");
     tryDiv.append(input);
   }
+}
+
+function disabledAllInputs() {
+  const inputsInDisabledDiv = document.querySelectorAll(
+    ".disabled-inputs input"
+  );
+
+  inputsInDisabledDiv.forEach((input) => (input.disabled = true));
+}
+
+function convertInputToUpperAndFocus(inputs) {
+  inputs.forEach((input, index) => {
+    input.addEventListener("input", function () {
+      this.value = this.value.toUpperCase();
+
+      const nextInput = inputs[index + 1];
+      if (nextInput) nextInput.focus();
+    });
+  });
+}
+
+function moveToRightAndLeft(inputs) {
+  inputs.forEach((input) => {
+    input.addEventListener("keydown", function (event) {
+      const currentIndex = Array.from(inputs).indexOf(event.target);
+
+      if (event.key === "ArrowRight") {
+        const nextInput = currentIndex + 1;
+        if (nextInput < inputs.length) inputs[nextInput].focus();
+      }
+
+      if (event.key === "ArrowLeft") {
+        const prevInput = currentIndex - 1;
+        if (prevInput >= 0) inputs[prevInput].focus();
+      }
+    });
+  });
 }
 
 window.addEventListener("load", generateTryDiv);
