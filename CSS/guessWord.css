@@ -1,5 +1,9 @@
 :root {
   --primary-color: #f44336;
+  --Secondary-color: #246bfd;
+  --three-color: #85898d;
+  --primary-background: #fefefe;
+  --main-box-shadow: 0 1px 5px 0px rgba(0, 0, 0, 10%);
 }
 
 * {
@@ -10,4 +14,147 @@ body {
   margin: 0;
   background-color: #eee;
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.main-title {
+  text-align: center;
+  padding: 20px;
+  margin: 0 0 40px;
+  background-color: var(--primary-background);
+  box-shadow: var(--main-box-shadow);
+  h1 {
+    margin: 0;
+    font-size: 25px;
+    color: var(--three-color);
+  }
+}
+
+.guess-game {
+  width: 1000px;
+  text-align: center;
+  margin: 20px auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  .game-area {
+    .inputs {
+      > div {
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        span {
+          font-size: 25px;
+          font-weight: bold;
+          color: var(--three-color);
+          margin-right: 15px;
+        }
+      }
+      .disabled-inputs {
+        opacity: 0.5;
+        pointer-events: none;
+      }
+      input {
+        width: 50px;
+        height: 50px;
+        margin: 0 5px;
+        text-align: center;
+        font-size: 40px;
+        caret-color: var(--primary-color);
+        background-color: var(--primary-background);
+        border: none;
+        border-radius: 3px;
+        box-shadow: var(--main-box-shadow);
+        border-bottom: 3px solid var(--three-color);
+        transition: 0.3s;
+        /* color: var(--primary-background); */
+        &:focus {
+          outline-color: #dee2e6;
+          border-color: transparent;
+        }
+        &.yes-in-place {
+          background-color: #f89e13;
+          border: #f89e13;
+          color: var(--primary-background);
+        }
+        &.not-in-place {
+          background-color: #18ba89;
+          border: #18ba89;
+          color: var(--primary-background);
+        }
+        &.no {
+          background-color: red;
+          border: red;
+          /* background-color: #27303f;
+            border: #27303f; */
+          color: var(--primary-background);
+        }
+      }
+    }
+
+    .control {
+      button {
+      }
+      .check {
+      }
+      .hint {
+      }
+    }
+
+    .massage {
+    }
+  }
+
+  .key-colors {
+    h2 {
+      color: var(--Secondary-color);
+    }
+
+    .key-color {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      background-color: var(--primary-background);
+      margin-bottom: 15px;
+      border-radius: 6px;
+      box-shadow: var(--main-box-shadow);
+
+      .key {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        margin-right: 10px;
+
+        &.in-place {
+          background-color: #f89e13;
+        }
+        &.not-in-place {
+          background-color: #18ba89;
+        }
+        &.no {
+          background-color: red;
+        }
+      }
+      .key-text {
+        font-size: 20px;
+        color: var(--three-color);
+      }
+    }
+  }
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  position: fixed;
+  font-size: 17px;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #333;
+  color: var(--primary-background);
+  span {
+    color: var(--three-color);
+  }
 }
