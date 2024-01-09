@@ -9,6 +9,22 @@ let numberofTries = 5;
 let numberofLetters = 6;
 let currentTry = 1;
 
+// Manage Words
+let wordGuess = "";
+const words = [
+  "Create",
+  "Update",
+  "Delete",
+  "Master",
+  "Branch",
+  "Mainly",
+  "Elzero",
+  "School",
+];
+
+wordGuess = words[Math.floor(Math.random() * words.length)].toLowerCase();
+let massageContainer = document.querySelector(".massage");
+
 function generateTryDiv() {
   const inputsContainer = document.querySelector(".inputs");
 
@@ -82,6 +98,56 @@ function moveToRightAndLeft(inputs) {
       }
     });
   });
+}
+
+const guessButton = document.querySelector(".control .check");
+
+guessButton.addEventListener("click", handleGuesses);
+
+//
+console.log(wordGuess);
+
+function handleGuesses() {
+  let successGuess = true;
+  //
+  console.log(wordGuess);
+
+  for (let i = 1; i <= numberofLetters; i++) {
+    const inputField = document.querySelector(
+      `#guess-${currentTry}-letter-${i}`
+    );
+    const letter = inputField.value.toLowerCase();
+    const actualLetter = wordGuess[i - 1];
+
+    // Game Logic
+    successGuess = checkLetter(letter, actualLetter, inputField, successGuess);
+  }
+
+  // Check If User Win Or Lose
+  if (successGuess) {
+    massageContainer.innerHTML = `You Win The Word Is <span>${wordGuess}</span>`;
+
+    // Disabled All inputs  and guessButton
+    let allTries = document.querySelectorAll(".inputs >div");
+    allTries.forEach((tryDiv) => tryDiv.classList.add("disabled-inputs"));
+    guessButton.disabled = true;
+  } else {
+    console.log("You Lose");
+  }
+}
+
+function checkLetter(letter, actualLetter, inputField, successGuess) {
+  if (letter === actualLetter) {
+    inputField.classList.add("yes-in-place");
+    return (successGuess = true);
+  } else if (wordGuess.includes(letter) && letter !== "") {
+    // Letter Is Correct and not In Palce
+    inputField.classList.add("not-in-place");
+    return (successGuess = false);
+  } else {
+    inputField.classList.add("no");
+    return (successGuess = false);
+  }
 }
 
 window.addEventListener("load", generateTryDiv);
