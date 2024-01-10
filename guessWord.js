@@ -112,16 +112,8 @@ function handleGuesses() {
   //
   console.log(wordGuess);
 
-  for (let i = 1; i <= numberofLetters; i++) {
-    const inputField = document.querySelector(
-      `#guess-${currentTry}-letter-${i}`
-    );
-    const letter = inputField.value.toLowerCase();
-    const actualLetter = wordGuess[i - 1];
-
-    // Game Logic
-    successGuess = checkLetter(letter, actualLetter, inputField, successGuess);
-  }
+  // Game Logic
+  successGuess = checkLetter(successGuess);
 
   // Check If User Win Or Lose
   if (successGuess) {
@@ -132,21 +124,56 @@ function handleGuesses() {
     allTries.forEach((tryDiv) => tryDiv.classList.add("disabled-inputs"));
     guessButton.disabled = true;
   } else {
-    console.log("You Lose");
+    document
+      .querySelector(`.try-${currentTry}`)
+      .classList.add("disabled-inputs");
+    const currentTryInputs = document.querySelectorAll(
+      `.try-${currentTry} input`
+    );
+    currentTryInputs.forEach((input) => (input.disabled = true));
+
+    currentTry++;
+
+    const nextTryInputs = document.querySelectorAll(`.try-${currentTry} input`);
+    nextTryInputs.forEach((input) => (input.disabled = false));
+
+    let elTry = document.querySelector(`.try-${currentTry}`);
+    checkTryExist(elTry);
   }
 }
 
-function checkLetter(letter, actualLetter, inputField, successGuess) {
-  if (letter === actualLetter) {
-    inputField.classList.add("yes-in-place");
-    return (successGuess = true);
-  } else if (wordGuess.includes(letter) && letter !== "") {
-    // Letter Is Correct and not In Palce
-    inputField.classList.add("not-in-place");
-    return (successGuess = false);
+function checkLetter(successGuess) {
+  for (let i = 1; i <= numberofLetters; i++) {
+    const inputField = document.querySelector(
+      `#guess-${currentTry}-letter-${i}`
+    );
+    const letter = inputField.value.toLowerCase();
+    const actualLetter = wordGuess[i - 1];
+
+    if (letter === actualLetter) {
+      inputField.classList.add("yes-in-place");
+      successGuess = true;
+    } else if (wordGuess.includes(letter) && letter !== "") {
+      // Letter Is Correct and not In Palce
+      inputField.classList.add("not-in-place");
+      successGuess = false;
+    } else {
+      inputField.classList.add("no");
+      successGuess = false;
+    }
+  }
+  return successGuess;
+}
+
+function checkTryExist(elTry) {
+  if (elTry) {
+    document
+      .querySelector(`.try-${currentTry}`)
+      .classList.remove("disabled-inputs");
+    elTry.children[1].focus();
   } else {
-    inputField.classList.add("no");
-    return (successGuess = false);
+    guessButton.disabled = true;
+    massageContainer.innerHTML = `You Lose The Word Is <span>${wordGuess}</span>`;
   }
 }
 
