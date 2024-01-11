@@ -8,6 +8,7 @@ document.querySelector("footer").prepend(`${gameName} Game Created By `);
 let numberofTries = 5;
 let numberofLetters = 6;
 let currentTry = 1;
+let numberOfHints = 2;
 
 // Manage Words
 let wordGuess = "";
@@ -21,9 +22,14 @@ const words = [
   "Elzero",
   "School",
 ];
-
 wordGuess = words[Math.floor(Math.random() * words.length)].toLowerCase();
 let massageContainer = document.querySelector(".massage");
+
+// Manage Hints
+let containerNumHints = document.querySelector(".hint span");
+containerNumHints.innerHTML = numberOfHints;
+const hintButton = document.querySelector(".hint");
+hintButton.addEventListener("click", getHint);
 
 function generateTryDiv() {
   const inputsContainer = document.querySelector(".inputs");
@@ -174,6 +180,35 @@ function checkTryExist(elTry) {
   } else {
     guessButton.disabled = true;
     massageContainer.innerHTML = `You Lose The Word Is <span>${wordGuess}</span>`;
+  }
+}
+
+function getHint() {
+  if (numberOfHints > 0) {
+    numberOfHints--;
+    containerNumHints.innerHTML = numberOfHints;
+  }
+  if (numberOfHints === 0) {
+    hintButton.disabled = true;
+  }
+  // Hint To Fill Random Empty Inputs
+  hintFillEmptyInputs();
+}
+
+function hintFillEmptyInputs() {
+  let enabledInputs = document.querySelectorAll("input:not([disabled])");
+  let emptyEnabledInputs = Array.from(enabledInputs).filter(
+    (input) => input.value === ""
+  );
+
+  if (emptyEnabledInputs.length > 0) {
+    const randomIndex = Math.floor(Math.random() * emptyEnabledInputs.length);
+    const randomInput = emptyEnabledInputs[randomIndex];
+    const indexToFill = Array.from(enabledInputs).indexOf(randomInput);
+
+    if (indexToFill !== -1) {
+      randomInput.value = wordGuess[indexToFill].toUpperCase();
+    }
   }
 }
 
